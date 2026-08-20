@@ -1,0 +1,1250 @@
+/* ==========================================================================
+   Venue Event Calendar — front-end styles
+   Colors sampled from the supplied brand mockup:
+     dark bg        #151914
+     primary lime   #88bb00  (buttons, badges, pagination)
+     icon/accent    #8cc63f  (icons, dropdown underline + arrow)
+     muted text     #7a7c79  (placeholders, secondary field text)
+     cream badge    #fff98f
+   Adjust the custom properties below to re-theme the whole widget.
+   ========================================================================== */
+
+.vec-events {
+	--vec-bg: #151914;
+	--vec-bg-raised: #1d241c;
+	--vec-row-bg: #262626;
+	--vec-green: #88bb00;
+	--vec-green-dark: #6d9600;
+	--vec-icon-green: #8cc63f;
+	--vec-white: #ffffff;
+	--vec-text-muted: #7a7c79;
+	--vec-border: #2c3a1c;
+	--vec-badge-bg: #fff98f;
+	--vec-badge-text: #000000;
+	--vec-radius: 10px;
+	--vec-gap: 20px;
+	--vec-font: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+	box-sizing: border-box;
+	font-family: var(--vec-font);
+	color: var(--vec-white);
+	background: var(--vec-bg);
+	padding: 20px;
+	border-radius: var(--vec-radius);
+}
+
+.vec-events *,
+.vec-events *::before,
+.vec-events *::after {
+	box-sizing: border-box;
+}
+
+.vec-events img {
+	max-width: 100%;
+	display: block;
+}
+
+/* ---------------------------------- Filter bar ---------------------------------- */
+
+.vec-screen-reader-text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.vec-filterbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px 24px;
+	padding-bottom: 18px;
+	margin-bottom: 16px;
+	border-bottom: 1px solid var(--vec-border);
+}
+
+.vec-filterbar__fields {
+	position: relative;
+	display: flex;
+	flex: 1 1 420px;
+	align-items: stretch;
+	border: 1px solid var(--vec-border);
+	overflow: visible;
+}
+
+.vec-input::placeholder {
+	color: var(--vec-text-muted);
+}
+
+/* ---- Dates trigger + popover ---- */
+
+.vec-datefield {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	background: transparent;
+	border: none;
+	border-right: 1px solid var(--vec-border);
+	color: var(--vec-white);
+	padding: 10px 16px;
+	cursor: pointer;
+	text-align: left;
+	flex: 1 1 auto;
+}
+
+.vec-datefield__text {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.vec-datefield__label {
+	font-family: var(--vec-font);
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--vec-white);
+}
+
+.vec-datefield__value {
+	font-size: 14px;
+	color: var(--vec-text-muted);
+}
+
+.vec-datefield__chevron {
+	margin-left: auto;
+	width: 8px;
+	height: 8px;
+	border-right: 2px solid var(--vec-icon-green);
+	border-bottom: 2px solid var(--vec-icon-green);
+	transform: rotate(45deg);
+	flex-shrink: 0;
+}
+
+.vec-date-popover {
+	position: absolute;
+	top: calc(100% + 8px);
+	left: 0;
+	z-index: 30;
+	width: 300px;
+	max-width: 90vw;
+	background: var(--vec-bg-raised);
+	border: 1px solid var(--vec-border);
+	border-radius: 10px;
+	padding: 16px;
+	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+	text-align: left;
+}
+
+.vec-date-popover__nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.vec-date-popover__nav .vec-btn--pager {
+	padding: 6px 10px;
+	background: var(--vec-bg);
+	color: var(--vec-white);
+	border-color: var(--vec-border);
+}
+
+.vec-date-popover__month-label {
+	font-weight: 700;
+	font-size: 14px;
+}
+
+.vec-date-popover__summary {
+	display: flex;
+	gap: 16px;
+	margin-bottom: 12px;
+	padding-bottom: 12px;
+	border-bottom: 1px solid var(--vec-border);
+}
+
+.vec-date-popover__summary-item {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.vec-date-popover__summary-label {
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--vec-icon-green);
+}
+
+.vec-date-popover__from-value,
+.vec-date-popover__to-value {
+	font-size: 13px;
+	color: var(--vec-white);
+}
+
+.vec-date-popover__weekdays,
+.vec-date-popover__days {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+}
+
+.vec-date-popover__weekday {
+	text-align: center;
+	font-size: 10px;
+	color: var(--vec-text-muted);
+	padding: 2px 0 6px;
+}
+
+.vec-date-popover__day {
+	aspect-ratio: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	color: var(--vec-white);
+	background: transparent;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+/* :not() guards keep hover from visually clobbering the selected endpoints,
+   which would otherwise outrank them on specificity. */
+.vec-date-popover__day:hover:not(.vec-date-popover__day--start):not(.vec-date-popover__day--end) {
+	background: rgba(140, 198, 63, 0.18);
+}
+
+.vec-date-popover__day--muted {
+	color: var(--vec-text-muted);
+	opacity: 0.35;
+	cursor: default;
+	pointer-events: none;
+}
+
+.vec-date-popover__day--in-range {
+	background: rgba(140, 198, 63, 0.22);
+	border-radius: 0;
+}
+
+.vec-date-popover__day--start,
+.vec-date-popover__day--end {
+	background: var(--vec-icon-green);
+	color: #12160f;
+	font-weight: 700;
+}
+
+.vec-date-popover__day--today {
+	box-shadow: inset 0 0 0 1px var(--vec-icon-green);
+}
+
+.vec-date-popover__actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 14px;
+}
+
+.vec-btn--text {
+	background: transparent;
+	border-color: transparent;
+	color: var(--vec-text-muted);
+	padding: 11px 10px;
+	margin-right: auto;
+}
+.vec-btn--text:hover {
+	color: var(--vec-white);
+}
+
+/* ---- Upcoming Events search field ---- */
+
+.vec-searchfield {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 16px;
+	flex: 1 1 240px;
+}
+
+.vec-searchfield__text {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.vec-searchfield__label {
+	font-family: var(--vec-font);
+	font-size: 11px;
+	text-align: left;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--vec-white);
+}
+
+/* Note: these use a doubled class to outrank the generic .vec-input box
+   styling further down the sheet, so the field reads as bare text. */
+.vec-searchfield .vec-searchfield__input,
+.vec-input.vec-searchfield__input {
+	background: transparent;
+	border: none;
+	border-radius: 0;
+	color: var(--vec-white);
+	padding: 0;
+	font-size: 14px;
+	min-height: 0;
+	width: 100%;
+	box-shadow: none;
+}
+.vec-searchfield .vec-searchfield__input:focus,
+.vec-input.vec-searchfield__input:focus {
+	outline: none;
+	box-shadow: none;
+}
+.vec-searchfield .vec-searchfield__input::placeholder {
+	color: var(--vec-text-muted);
+	opacity: 1;
+}
+/* Hide the native clear "X" that WebKit adds to type=search. */
+.vec-searchfield .vec-searchfield__input::-webkit-search-cancel-button {
+	-webkit-appearance: none;
+}
+
+.vec-input {
+	background: var(--vec-bg-raised);
+	border: 1px solid var(--vec-border);
+	color: var(--vec-white);
+	border-radius: 6px;
+	padding: 9px 12px;
+	font-size: 14px;
+	width: 100%;
+	min-height: 40px;
+}
+
+.vec-input:focus {
+	outline: 2px solid var(--vec-green);
+	outline-offset: 1px;
+}
+
+/* Buttons ------------------------------------------------------------------------ */
+
+.vec-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	font-size: 14px;
+	font-weight: 700;
+	border-radius: 6px;
+	padding: 11px 20px;
+	border: 2px solid transparent;
+	cursor: pointer;
+	text-decoration: none;
+	line-height: 1.1;
+	white-space: nowrap;
+	transition: transform 0.08s ease, opacity 0.15s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.vec-btn:hover {
+	opacity: 0.9;
+}
+.vec-btn:active {
+	transform: translateY(1px);
+}
+
+.vec-btn--primary {
+	background: var(--vec-green);
+	color: var(--vec-white) !important;
+	border-color: var(--vec-green);
+}
+.vec-btn--primary:hover {
+	background: var(--vec-green-dark);
+	border-color: var(--vec-green-dark);
+	color: var(--vec-white);
+}
+
+.vec-btn--secondary {
+	background: var(--vec-bg);
+	color: var(--vec-white) !important;
+	border-color: var(--vec-white);
+}
+.vec-btn--secondary:hover {
+	background: var(--vec-white);
+	color: var(--vec-bg);
+}
+
+.vec-search-btn {
+	flex-shrink: 0;
+}
+
+/* ---------------------------------- Toolbar ---------------------------------- */
+
+.vec-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin-bottom: 20px;
+}
+
+.vec-view-switcher {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.vec-view-switcher__label {
+	font-family: var(--vec-font);
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--vec-white);
+}
+
+.vec-ad-slot {
+	flex: 0 1 auto;
+	max-width: 260px;
+}
+.vec-ad-slot img {
+	width: 100%;
+	border-radius: 4px;
+}
+
+/* Each view option is its own square button: a thin border at rest that
+   thickens (and switches to the accent green) when that view is selected.
+   Icons stay green in both states — only the border communicates selection,
+   per spec. Sizing is content-driven (icon + padding) rather than a fixed
+   box, so the "add padding around the icon" ask lives in one place: the
+   padding value below. */
+.vec-view-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 9px;
+	background: var(--vec-bg-raised);
+	border: 1.5px solid var(--vec-border);
+	border-radius: 6px;
+	cursor: pointer;
+	transition: border-color 0.12s ease, border-width 0.12s ease;
+}
+
+.vec-view-btn:hover {
+	border-color: var(--vec-icon-green);
+}
+
+.vec-view-btn.is-active {
+	border: 2.5px solid var(--vec-icon-green);
+	/* Compensate padding so the icon doesn't visibly shift when the border
+	   thickens by 1px on each side. */
+	padding: 8px;
+}
+
+.vec-icon {
+	position: relative;
+	display: inline-flex;
+	color: var(--vec-icon-green);
+}
+
+.vec-icon svg {
+	display: block;
+	width: 18px;
+	height: 18px;
+}
+
+/* Larger calendar glyph used on the Dates filter trigger. */
+.vec-icon--calendar-lg {
+	width: 20px;
+	height: 18px;
+	border: 2px solid var(--vec-icon-green);
+	border-radius: 3px;
+	flex-shrink: 0;
+}
+.vec-icon--calendar-lg::before {
+	content: "";
+	position: absolute;
+	top: 4px;
+	left: -2px;
+	right: -2px;
+	height: 1px;
+	background: var(--vec-icon-green);
+}
+.vec-icon--calendar-lg::after {
+	content: "";
+	position: absolute;
+	top: -5px;
+	left: 4px;
+	width: 2px;
+	height: 5px;
+	background: var(--vec-icon-green);
+	box-shadow: 11px 0 0 0 var(--vec-icon-green);
+}
+
+/* Magnifying-glass glyph used on the search field. */
+.vec-icon--search {
+	width: 16px;
+	height: 16px;
+	border: 2px solid var(--vec-icon-green);
+	border-radius: 50%;
+	flex-shrink: 0;
+	margin-right: 4px;
+}
+.vec-icon--search::after {
+	content: "";
+	position: absolute;
+	bottom: -7px;
+	right: -3px;
+	width: 2px;
+	height: 8px;
+	border-radius: 1px;
+	background: var(--vec-icon-green);
+	transform: rotate(-45deg);
+	transform-origin: center;
+}
+
+.vec-category-filter {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+.vec-category-filter select.vec-input-category {
+	appearance: none;
+	-webkit-appearance: none;
+	background: transparent;
+	border: none;
+	border-bottom: 2px solid var(--vec-icon-green);
+	border-radius: 0;
+	color: var(--vec-white);
+	font-family: var(--vec-font);
+	font-size: 14px;
+	padding: 6px 26px 8px 2px;
+	min-height: auto;
+	min-width: 170px;
+	width: auto;
+	cursor: pointer;
+}
+.vec-category-filter select.vec-input-category:focus {
+	outline: none;
+}
+.vec-category-filter select.vec-input-category option {
+	background: var(--vec-bg-raised);
+	color: var(--vec-white);
+}
+.vec-category-filter__chevron {
+	position: absolute;
+	right: 6px;
+	top: 50%;
+	width: 8px;
+	height: 8px;
+	margin-top: -6px;
+	border-right: 2px solid var(--vec-icon-green);
+	border-bottom: 2px solid var(--vec-icon-green);
+	transform: rotate(45deg);
+	pointer-events: none;
+}
+
+/* ---------------------------------- Grid view ---------------------------------- */
+
+.vec-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: var(--vec-gap);
+}
+
+.vec-card {
+	display: flex;
+	flex-direction: column;
+	background: transparent;
+	transition: background-color 0.25s ease;
+}
+
+.vec-card:hover {
+	background: #ffffff;
+}
+
+.vec-card__media,
+.vec-row__media {
+	position: relative;
+	overflow: hidden;
+	
+}
+
+/* Both grid and list view images are square-cornered. */
+.vec-card__media {
+	border-radius: 0;
+}
+.vec-row__media {
+}
+
+.vec-card__media img,
+.vec-row__media img {
+	width: 100%;
+	height: 100% !important;
+	object-fit: cover;
+}
+
+/* .vec-card__media / .vec-row__media no longer set aspect-ratio, so a real
+   <img> (a replaced element) still sizes itself from its own intrinsic
+   ratio — but this placeholder is a plain <div>, so "height: 100%" against
+   an auto-height parent resolves to 0 and the box (and the Upgrade badge
+   inside it) disappears for any event with no artist_image set. Giving the
+   placeholder its own aspect-ratio keeps it self-sizing regardless of what
+   the parent does. */
+.vec-card__media-placeholder,
+.vec-row__media-placeholder {
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	background: linear-gradient(135deg, #232b21, #10140f);
+}
+
+.vec-badge {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 2;
+	background: var(--vec-badge-bg);
+	color: var(--vec-badge-text);
+	font-family: var(--vec-font);
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.2;
+	padding: 5px 12px;
+	border-radius: 6px;
+}
+
+.vec-card__body {
+	padding: 1rem;
+}
+
+.vec-row__date {
+	color: var(--vec-green);
+	font-size: 12px;
+	font-weight: 700;
+	margin: 0 0 4px;
+	text-align: left;
+	transition: color 0.25s ease;
+}
+
+.vec-card__date {
+	color: var(--vec-white);
+	font-size: 16px;
+	font-weight: 300;
+	text-align: left;
+	margin: 10px 0px;
+	transition: color 0.25s ease;
+}
+
+.vec-card__title {
+	margin: 0 0 12px;
+	font-size: 24px;
+	line-height: 1.3;
+	color: var(--vec-white) !important;
+	text-align: left;
+	transition: color 0.25s ease;
+}
+
+.vec-card__title a,
+.vec-row__title a {
+	color: var(--vec-white) !important;
+	text-decoration: none;
+	transition: color 0.25s ease;
+}
+.vec-card__title a:hover,
+.vec-row__title a:hover {
+	text-decoration: underline;
+}
+
+/* Hovering an event (card in grid view, row in list view) turns its
+   background white and recolors its date/title/"More Info" text+outline to
+   #626262, instead of only swapping the background. */
+.vec-card:hover .vec-card__date,
+.vec-row:hover .vec-row__date {
+	color: #626262;
+}
+.vec-card:hover .vec-card__title,
+.vec-card:hover .vec-card__title a,
+.vec-row:hover .vec-row__title a {
+	color: #626262 !important;
+}
+.vec-card:hover .vec-btn--secondary,
+.vec-row:hover .vec-btn--secondary {
+	background: #ffffff;
+	color: #626262 !important;
+	border-color: #626262 !important;
+}
+
+/* Artist name and tour name stack as two lines. They're block-level rather
+   than separated by a <br> so each line can be spaced/styled on its own. */
+/* Deliberately no font-size here: these spans are shared between the grid
+   card (.vec-card__title, 24px) and the list row (.vec-row__title, 16px) —
+   they inherit whichever size their heading ancestor sets. Hardcoding a
+   size on the span itself would win over that inherited value and force
+   both views to the same size. */
+.vec-title__artist,
+.vec-title__tour {
+	display: block;
+	text-align: left;
+}
+
+.vec-title__tour {
+	margin-top: 2px;
+}
+
+.vec-card__actions {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+.vec-card__actions .vec-btn {
+	flex: 1 1 auto;
+}
+
+/* ---------------------------------- List view ---------------------------------- */
+
+.vec-list {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+/* Two columns, roughly 30/70 — column 1 is the image only (full width/height
+   of its column, no padding around it), column 2 holds everything else. */
+/* A fixed height (rather than letting the row size itself from its content)
+   is what actually fixes "the list events are too high": a real <img> is a
+   replaced element with its own intrinsic aspect ratio, so when the row's
+   height was left to auto, the grid sized the whole row tall enough to fit
+   the photo at its natural aspect ratio — a tall/square photo could make
+   the row much taller than the text ever needed. Pinning the row's height
+   removes that dependency; object-fit: cover (already set on the image)
+   crops to fill whatever box it's given, and the existing overflow: hidden
+   above clips anything that doesn't fit instead of pushing the row taller. */
+.vec-row {
+	display: grid;
+	grid-template-columns: 30% 70%;
+	align-items: stretch;
+	background: var(--vec-row-bg);
+	overflow: hidden;
+	height: 216px;
+	transition: background-color 0.25s ease;
+}
+
+.vec-row:hover {
+	background: #ffffff;
+}
+
+/* Row-view media fills the entire first column (width and height) rather
+   than sizing itself via aspect-ratio — the grid stretches this column to
+   match column 2's content height, and object-fit: cover on the <img>
+   (below) crops to fill it completely. */
+.vec-row__media {
+	height: 100%;
+}
+
+.vec-row__media img {
+	height: 100%;
+}
+
+/* Row-view placeholder: same reasoning as the media wrapper above — an
+   explicit height: 100% (the parent has a definite stretched height) takes
+   over from the shared aspect-ratio: 4/3 declaration, since aspect-ratio
+   only fills a dimension left auto. */
+.vec-row__media-placeholder {
+	height: 100%;
+}
+
+/* Column 2: left padding separates the text from the image; the info block
+   (date/artist/tour/venue) and the actions row stack as two distinct rows,
+   pinned to the top and bottom of the row's height. */
+.vec-row__body {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 14px;
+	padding: 16px 16px 16px 20px;
+}
+
+.vec-row__info {
+	text-align: left;
+}
+
+.vec-row__title {
+	margin: 0 0 4px;
+	font-size: 16px;
+	text-align: left;
+}
+
+.vec-row__venue {
+	margin: 0;
+	color: var(--vec-text-muted);
+	font-size: 13px;
+	text-align: left;
+}
+
+/* Buy Tickets + More Info sit on one line, right-aligned, below the info
+   block within column 2. */
+.vec-row__actions {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 10px;
+}
+
+/* ---------------------------------- Carousel view ---------------------------------- */
+
+/* Full-width, clips the track so only whole cards are ever visible — the
+   track itself is twice as wide as the visible strip (see
+   VEC_Render::carousel()) and slides continuously underneath. */
+.vec-carousel {
+	width: 100%;
+	overflow: hidden;
+}
+
+.vec-carousel__track {
+	display: flex;
+	gap: var(--vec-gap);
+	width: max-content;
+	animation: vec-carousel-scroll linear infinite;
+}
+
+@keyframes vec-carousel-scroll {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		/* Exactly half the track's width, since it's two identical passes
+		   over the same events back to back — at -50% the second pass lines
+		   up exactly where the first one started, so the loop is seamless. */
+		transform: translateX(-50%);
+	}
+}
+
+/* Hovering anywhere on the carousel stops the whole strip so whatever's
+   visible can be read/clicked. */
+.vec-carousel:hover .vec-carousel__track {
+	animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.vec-carousel__track {
+		animation: none;
+	}
+}
+
+/* A compact carousel card: full-width image on top, date/artist/tour left
+   aligned underneath, no action buttons — the whole card is one link to
+   the event's permalink. Fixed width + a fixed media aspect-ratio (rather
+   than sizing from the photo's own intrinsic ratio) keeps every card the
+   same height regardless of what a given photo's natural proportions are —
+   the same reasoning behind the fixed-height fix on list-view rows. */
+.vec-carousel__card {
+	display: flex;
+	flex-direction: column;
+	flex: 0 0 260px;
+	width: 260px;
+	background: var(--vec-row-bg);
+	overflow: hidden;
+	text-decoration: none;
+	color: inherit;
+	border: 1px solid transparent;
+	transition: border-color 0.25s ease;
+}
+
+/* Per the request: hovering a card here should NOT do the white-background/
+   gray-text swap the grid and list views use — just a 1px accent border
+   fading in, which is all this card needs since there's nothing else on it
+   to recolor. */
+.vec-carousel__card:hover,
+.vec-carousel__card:focus-visible {
+	border-color: #8cc63f;
+}
+.vec-carousel__card:focus-visible {
+	outline: 2px solid var(--vec-green);
+	outline-offset: 2px;
+}
+
+.vec-carousel__media {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+}
+
+.vec-carousel__media img {
+	width: 100%;
+	height: 100%;
+	display: block;
+	object-fit: cover;
+}
+
+.vec-carousel__media-placeholder {
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(135deg, #232b21, #10140f);
+}
+
+.vec-carousel__body {
+	padding: 14px 16px;
+	text-align: left;
+}
+
+.vec-carousel__date {
+	margin: 0 0 4px;
+	color: var(--vec-green);
+	font-size: 12px;
+	font-weight: 700;
+	text-align: left;
+}
+
+.vec-carousel__title {
+	margin: 0;
+	font-size: 16px;
+	color: var(--vec-white);
+}
+
+/* ---------------------------------- Calendar view ---------------------------------- */
+
+.vec-events [hidden] {
+	display: none !important;
+}
+
+.vec-calendar-nav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 18px;
+	margin-bottom: 16px;
+}
+.vec-calendar-nav__label {
+	font-weight: 700;
+	font-size: 16px;
+	min-width: 160px;
+	text-align: center;
+}
+.vec-calendar-nav .vec-btn--pager {
+	padding: 8px 12px;
+	background: var(--vec-bg-raised);
+	color: var(--vec-white);
+	border-color: var(--vec-border);
+}
+
+.vec-calendar__weekdays,
+.vec-calendar__grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+}
+
+.vec-calendar__weekday {
+	text-align: center;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--vec-text-muted);
+	padding: 6px 0;
+}
+
+/* Each day square is its own black box with a 5px margin on every side —
+   real spacing (not the old overlapping-border grid-line trick), so squares
+   read as distinct cards rather than a continuous table grid. */
+.vec-calendar__cell {
+	min-height: 90px;
+	margin: 5px;
+	padding: 6px;
+	background: #000000;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	transition: background-color 0.25s ease;
+}
+
+.vec-calendar__cell:hover {
+	background: #ffffff;
+}
+
+.vec-calendar__cell:hover .vec-calendar__day-number,
+.vec-calendar__cell:hover .vec-calendar__chip-time,
+.vec-calendar__cell:hover .vec-calendar__chip-title,
+.vec-calendar__cell:hover .vec-calendar__more {
+	color: #000000;
+}
+
+.vec-calendar__day-number,
+.vec-calendar__chip-time,
+.vec-calendar__chip-title,
+.vec-calendar__more {
+	transition: color 0.25s ease;
+}
+
+.vec-calendar__cell--today {
+	background: #000000;
+	box-shadow: inset 0 0 0 1px var(--vec-green);
+}
+
+/* Same specificity as the plain hover rule above (both are one class + one
+   compound descendant selector), so without this the "today" green number
+   color — which comes later in the sheet — would win the tie and the number
+   would stay green on hover instead of turning black like every other day. */
+.vec-calendar__cell--today:hover .vec-calendar__day-number {
+	color: #000000;
+}
+
+/* Leading/trailing filler cells belong to the previous/next month. */
+.vec-calendar__cell--empty {
+	background: #262626;
+}
+
+.vec-calendar__day-number {
+	font-family: var(--vec-font);
+	font-size: 24px;
+	color: var(--vec-white);
+	text-align: left;
+	align-self: flex-start;
+}
+
+.vec-calendar__cell--today .vec-calendar__day-number {
+	color: var(--vec-green);
+	font-weight: 700;
+}
+
+.vec-calendar__events {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+
+.vec-calendar__chip {
+	display: flex;
+	align-items: baseline;
+	gap: 4px;
+	background: transparent;
+	font-size: 10.5px;
+	font-weight: 700;
+	line-height: 1.3;
+	padding: 2px 0;
+	border-radius: 3px;
+	text-decoration: none;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.vec-calendar__chip-time {
+	flex: 0 0 auto;
+	color: #767676;
+}
+
+.vec-calendar__chip-title {
+	min-width: 0;
+	color: var(--vec-white);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.vec-calendar__more {
+	font-size: 10px;
+	color: var(--vec-text-muted);
+}
+
+/* ---------------------------------- Pagination ---------------------------------- */
+
+.vec-pagination-wrap {
+	margin-top: 24px;
+}
+
+.vec-pagination {
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.vec-btn--pager.vec-btn--prev {
+	background: var(--vec-white);
+	color: #12160f;
+	border-color: var(--vec-white);
+	height: 168px;
+	width: 369px;
+	font-size: 20px;
+}
+.vec-btn--pager.vec-btn--next {
+	background: var(--vec-green);
+	color: #12160f;
+	border-color: var(--vec-green);
+	height: 168px;
+	width: 369px;
+	font-size: 20px;
+}
+.vec-btn--pager:disabled {
+	opacity: 0.35;
+	cursor: not-allowed;
+}
+.vec-btn__arrow {
+	font-size: 15px;
+}
+
+/* ---------------------------------- Misc states ---------------------------------- */
+
+.vec-empty {
+	padding: 40px 20px;
+	text-align: center;
+	color: var(--vec-text-muted);
+}
+
+.vec-events.is-loading .vec-results {
+	opacity: 0.45;
+	pointer-events: none;
+	transition: opacity 0.15s ease;
+}
+
+/* ---------------------------------- Responsive ---------------------------------- */
+
+@media (max-width: 782px) {
+	.vec-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.vec-row {
+		grid-template-columns: 35% 65%;
+	}
+	.vec-row__body {
+		padding: 14px 14px 14px 16px;
+	}
+	.vec-calendar__cell {
+		min-height: 70px;
+	}
+	/* The desktop pager buttons use a fixed 369px width, which only fits a
+	   container wide enough for both plus their gap (~750px). Below that,
+	   let them share the row equally instead of overflowing it. */
+	.vec-btn--pager.vec-btn--prev,
+	.vec-btn--pager.vec-btn--next {
+		width: auto;
+		flex: 1 1 0;
+		height: 96px;
+		font-size: 16px;
+	}
+	.vec-carousel__card {
+		flex-basis: 220px;
+		width: 220px;
+	}
+}
+
+@media (max-width: 560px) {
+	.vec-events {
+		padding: 14px;
+	}
+	.vec-filterbar {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	/* Once stacked, flex-basis applies to height — reset it on the wrapper and
+	   both fields so they hug their content instead of stretching. */
+	.vec-filterbar__fields {
+		flex: 0 0 auto;
+		flex-direction: column;
+	}
+	.vec-datefield,
+	.vec-searchfield {
+		flex: 0 0 auto;
+	}
+	.vec-datefield {
+		border-right: none;
+		border-bottom: 1px solid var(--vec-border);
+	}
+	.vec-date-popover {
+		left: 0;
+		right: 0;
+		width: auto;
+	}
+	.vec-search-btn {
+		width: 100%;
+	}
+	.vec-toolbar {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.vec-ad-slot {
+		max-width: 100%;
+	}
+	.vec-category-filter {
+		width: 100%;
+	}
+	.vec-category-filter select.vec-input-category {
+		width: 100%;
+		min-width: 0;
+	}
+	.vec-grid {
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+	}
+	.vec-card__title {
+		font-size: 18px;
+	}
+	.vec-badge {
+		font-size: 14px;
+		padding: 4px 10px;
+	}
+	.vec-card__actions {
+		flex-direction: column;
+	}
+	/* Below this width the row stacks into a single column: image on top,
+	   body underneath. Column 2's "fill full height of the row" trick relies
+	   on a two-column grid stretch, so revert media back to an explicit
+	   aspect-ratio here instead. The fixed 216px row height is a desktop/
+	   tablet-only fix too — stacked image + text needs more room than that,
+	   so let the row's height go back to auto here. */
+	.vec-row {
+		grid-template-columns: 1fr;
+		height: auto;
+	}
+	.vec-row__media,
+	.vec-row__media-placeholder {
+		height: auto;
+		aspect-ratio: 16 / 9;
+	}
+	.vec-row__media img {
+		height: 100% !important;
+	}
+	.vec-row__body {
+		padding: 14px;
+	}
+	.vec-row__actions {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.vec-carousel__card {
+		flex-basis: 180px;
+		width: 180px;
+	}
+	.vec-calendar__cell {
+		min-height: 56px;
+		padding: 3px;
+	}
+	.vec-calendar__chip {
+		font-size: 9px;
+	}
+	.vec-calendar__day-number {
+		font-size: 15px;
+	}
+	.vec-pagination {
+		flex-direction: column;
+	}
+	.vec-btn--pager.vec-btn--prev,
+	.vec-btn--pager.vec-btn--next {
+		width: 100%;
+		height: 64px;
+		font-size: 15px;
+	}
+}
+
+@media (max-width: 380px) {
+	.vec-grid {
+		grid-template-columns: 1fr;
+	}
+}
