@@ -19,13 +19,14 @@ class VEC_Ajax {
 		check_ajax_referer( 'vec_nonce', 'nonce' );
 
 		$view            = isset( $_POST['view'] ) ? sanitize_text_field( wp_unslash( $_POST['view'] ) ) : 'grid';
-		$view            = in_array( $view, array( 'grid', 'list', 'calendar', 'carousel' ), true ) ? $view : 'grid';
+		$view            = in_array( $view, array( 'grid', 'list', 'calendar', 'carousel', 'slider' ), true ) ? $view : 'grid';
 		$search          = isset( $_POST['search'] ) ? sanitize_text_field( wp_unslash( $_POST['search'] ) ) : '';
 		$date_from       = isset( $_POST['date_from'] ) ? sanitize_text_field( wp_unslash( $_POST['date_from'] ) ) : '';
 		$date_to         = isset( $_POST['date_to'] ) ? sanitize_text_field( wp_unslash( $_POST['date_to'] ) ) : '';
 		$category        = isset( $_POST['category'] ) ? sanitize_text_field( wp_unslash( $_POST['category'] ) ) : '';
 		$locked_category = isset( $_POST['locked_category'] ) ? sanitize_text_field( wp_unslash( $_POST['locked_category'] ) ) : '';
 		$paged           = isset( $_POST['paged'] ) ? max( 1, (int) $_POST['paged'] ) : 1;
+		$offset          = isset( $_POST['offset'] ) ? max( 0, (int) $_POST['offset'] ) : 0;
 		$posts_per_page  = isset( $_POST['posts_per_page'] ) ? max( 1, (int) $_POST['posts_per_page'] ) : 9;
 		$hide_past       = isset( $_POST['hide_past'] ) ? ( '1' === sanitize_text_field( wp_unslash( $_POST['hide_past'] ) ) ) : true;
 		$show_pagination = isset( $_POST['show_pagination'] ) ? ( '1' === sanitize_text_field( wp_unslash( $_POST['show_pagination'] ) ) ) : true;
@@ -57,6 +58,31 @@ class VEC_Ajax {
 					'month_label'  => $calendar['month_label'],
 					'paged'        => 1,
 					'max_pages'    => 1,
+				)
+			);
+			return;
+		}
+
+		if ( 'slider' === $view ) {
+			$slider_query = VEC_Query::get_events(
+				array(
+					'search'         => $search,
+					'date_from'      => $date_from,
+					'date_to'        => $date_to,
+					'category'       => $effective_category,
+					'hide_past'      => $hide_past,
+					'posts_per_page' => VEC_SLIDER_WINDOW,
+					'offset'         => $offset,
+				)
+			);
+
+			wp_send_json_success(
+				array(
+					'html'       => VEC_Render::slider( $slider_query, $offset, VEC_SLIDER_WINDOW, (int) $slider_query->found_posts ),
+					'pagination' => '',
+					'view'       => 'slider',
+					'paged'      => 1,
+					'max_pages'  => 1,
 				)
 			);
 			return;

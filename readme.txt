@@ -62,11 +62,12 @@ automatically) — handy for an artist- or genre-specific landing page:
 
     [venue_events category="rock" show_filters="no"]
 
-Start in list, calendar, or carousel view by default:
+Start in list, calendar, carousel, or slider view by default:
 
     [venue_events default_view="list"]
     [venue_events default_view="calendar"]
     [venue_events default_view="carousel"]
+    [venue_events default_view="slider"]
 
 Carousel is a full-width, auto-scrolling strip of compact cards — a
 full-width photo, then the date/artist/tour underneath — continuously
@@ -78,6 +79,18 @@ strip doesn't visually jump around while someone's trying to read or click
 a card. It always pulls posts_per_page events and never shows pagination
 controls — like the calendar's own month nav, there's nothing to page
 through.
+
+Slider is the manual counterpart to carousel: it never moves on its own.
+It shows 3 full event cards at a time (same layout as the grid — image,
+date, title, Buy Tickets / More Info) with round Previous/Next arrow
+buttons above them. Each click shifts the window by exactly one event, in
+ascending date order, and pages through every upcoming event (fetching
+more over AJAX as needed, the same way grid/list pagination does) rather
+than being limited to a fixed batch. Each arrow disables itself once
+there's nothing further in that direction — like carousel, it's reachable
+only via default_view (it isn't offered in the view switcher, since
+switching to a 3-card manual view doesn't make as much sense as an
+alternate layout for the same filtered result set).
 
 Change how many events show per page (grid/list views) and whether past
 events are hidden:
@@ -93,7 +106,8 @@ doesn't change how many events posts_per_page pulls, so pair the two:
 
 (show_pagination only affects the grid and list views — the calendar view
 never shows Previous/Next Events controls since it has its own month
-navigation, and neither does the carousel view, since it isn't paged.)
+navigation, the carousel view doesn't either since it isn't paged, and
+neither does the slider view, since it has its own Previous/Next arrows.)
 
 There are two ways to fill the ad slot that appears in the "View as" bar,
 between the view switcher and the Event Category dropdown:
@@ -128,7 +142,7 @@ All attributes (all optional):
 
     show_filters        yes | no     (default: yes)
     show_view_switcher  yes | no     (default: yes)
-    default_view         grid | list | calendar | carousel   (default: grid)
+    default_view         grid | list | calendar | carousel | slider   (default: grid)
     category              any value from your event_category field choices (default: none / all)
     posts_per_page        number (default: 9)
     hide_past              yes | no     (default: yes — hides events whose date has passed)

@@ -140,6 +140,68 @@ class VEC_Render {
 		<?php
 	}
 
+	/**
+	 * Render the manual slider: up to $window event cards (the same card
+	 * layout as the grid — image, date, title, Buy Tickets / More Info) with
+	 * Previous/Next arrow controls above them. Unlike the auto-scrolling
+	 * carousel, this never moves on its own — clicking an arrow shifts the
+	 * window by exactly one event (ascending date order), and each arrow
+	 * disables itself once there's nothing further in that direction.
+	 *
+	 * @param WP_Query $query  Already scoped to the current offset/window.
+	 * @param int      $offset Current window start (0-based, into the full ascending result set).
+	 * @param int      $window Number of cards shown at once.
+	 * @param int      $found  Total matching events, for deciding whether Next has anywhere to go.
+	 * @return string
+	 */
+	public static function slider( $query, $offset, $window, $found ) {
+		$has_prev    = $offset > 0;
+		$has_next    = ( $offset + $window ) < $found;
+		$prev_offset = max( 0, $offset - 1 );
+		$next_offset = $offset + 1;
+
+		ob_start();
+		?>
+		<div class="vec-slider">
+			<div class="vec-slider__nav">
+				<button
+					type="button"
+					class="vec-slider__arrow vec-slider__arrow--prev"
+					data-vec-slider-offset="<?php echo (int) $prev_offset; ?>"
+					aria-label="<?php esc_attr_e( 'Previous event', 'venue-event-calendar' ); ?>"
+					<?php disabled( ! $has_prev ); ?>
+				>
+					<?php echo VEC_Icons::get( 'chevron' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static, hand-authored SVG markup. ?>
+				</button>
+				<button
+					type="button"
+					class="vec-slider__arrow vec-slider__arrow--next"
+					data-vec-slider-offset="<?php echo (int) $next_offset; ?>"
+					aria-label="<?php esc_attr_e( 'Next event', 'venue-event-calendar' ); ?>"
+					<?php disabled( ! $has_next ); ?>
+				>
+					<?php echo VEC_Icons::get( 'chevron' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static, hand-authored SVG markup. ?>
+				</button>
+			</div>
+			<div class="vec-slider__track">
+				<?php
+				if ( ! $query->have_posts() ) {
+					echo self::empty_state(); // phpcs:ignore WordPress.Security.EscapeOutput -- built from static markup.
+				} else {
+					while ( $query->have_posts() ) {
+						$query->the_post();
+						$data = VEC_Fields::get_event_data( get_the_ID() );
+						self::render_card( $data );
+					}
+					wp_reset_postdata();
+				}
+				?>
+			</div>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
 	protected static function render_card( $data ) {
 		?>
 		<article class="vec-card">

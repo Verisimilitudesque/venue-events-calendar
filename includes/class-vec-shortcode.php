@@ -23,7 +23,7 @@ class VEC_Shortcode {
 			array(
 				'show_filters'       => 'yes',
 				'show_view_switcher' => 'yes',
-				'default_view'       => 'grid',   // grid | list | calendar | carousel
+				'default_view'       => 'grid',   // grid | list | calendar | carousel | slider
 				'category'           => '',        // locks the shortcode to a single event_category value
 				'posts_per_page'     => 9,
 				'hide_past'          => 'yes',
@@ -49,7 +49,7 @@ class VEC_Shortcode {
 		$hide_past          = self::is_yes( $atts['hide_past'] );
 		$show_pagination    = self::is_yes( $atts['show_pagination'] );
 		$show_ad            = self::is_yes( $atts['show_ad'] );
-		$default_view       = in_array( $atts['default_view'], array( 'grid', 'list', 'calendar', 'carousel' ), true ) ? $atts['default_view'] : 'grid';
+		$default_view       = in_array( $atts['default_view'], array( 'grid', 'list', 'calendar', 'carousel', 'slider' ), true ) ? $atts['default_view'] : 'grid';
 		$posts_per_page     = max( 1, (int) $atts['posts_per_page'] );
 		$locked_category    = sanitize_text_field( $atts['category'] );
 		$ad_image           = esc_url_raw( $atts['ad_image'] );
@@ -77,6 +77,25 @@ class VEC_Shortcode {
 			$pagination_html = '';
 			$max_pages     = 1;
 			$paged         = 1;
+			$slider_offset = 0;
+		} elseif ( 'slider' === $default_view ) {
+			// Fixed 3-card window, offset-based rather than paged — see
+			// VEC_Query::get_events()'s $offset argument.
+			$slider_offset   = 0;
+			$query           = VEC_Query::get_events(
+				array(
+					'category'       => $locked_category,
+					'hide_past'      => $hide_past,
+					'posts_per_page' => VEC_SLIDER_WINDOW,
+					'offset'         => $slider_offset,
+				)
+			);
+			$results_html    = VEC_Render::slider( $query, $slider_offset, VEC_SLIDER_WINDOW, (int) $query->found_posts );
+			$pagination_html = ''; // The slider has its own built-in Previous/Next arrows.
+			$max_pages       = 1;
+			$paged           = 1;
+			$current_month   = date_i18n( 'Y-m' );
+			$month_label     = date_i18n( 'F Y' );
 		} else {
 			$query = VEC_Query::get_events(
 				array(
@@ -100,6 +119,7 @@ class VEC_Shortcode {
 			$paged           = 1;
 			$current_month   = date_i18n( 'Y-m' );
 			$month_label     = date_i18n( 'F Y' );
+			$slider_offset   = 0;
 		}
 
 		ob_start();
@@ -115,6 +135,7 @@ class VEC_Shortcode {
 			data-view="<?php echo esc_attr( $default_view ); ?>"
 			data-paged="<?php echo esc_attr( $paged ); ?>"
 			data-max-pages="<?php echo esc_attr( $max_pages ); ?>"
+			data-slider-offset="<?php echo esc_attr( $slider_offset ); ?>"
 			data-month="<?php echo esc_attr( $current_month ); ?>"
 		>
 			<?php if ( $show_filters ) : ?>
@@ -235,7 +256,7 @@ class VEC_Shortcode {
 				<?php echo $results_html; // phpcs:ignore WordPress.Security.EscapeOutput -- built from escaped partials above. ?>
 			</div>
 
-			<div class="vec-pagination-wrap" <?php echo ( 'calendar' === $default_view || 'carousel' === $default_view || ! $show_pagination ) ? 'hidden' : ''; ?>>
+			<div class="vec-pagination-wrap" <?php echo ( 'calendar' === $default_view || 'carousel' === $default_view || 'slider' === $default_view || ! $show_pagination ) ? 'hidden' : ''; ?>>
 				<?php echo $pagination_html; // phpcs:ignore WordPress.Security.EscapeOutput -- built from escaped partials above. ?>
 			</div>
 		</div>

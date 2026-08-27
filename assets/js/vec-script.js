@@ -252,6 +252,7 @@
 		var state = {
 			view: container.getAttribute( 'data-view' ) || 'grid',
 			paged: parseInt( container.getAttribute( 'data-paged' ), 10 ) || 1,
+			offset: parseInt( container.getAttribute( 'data-slider-offset' ), 10 ) || 0,
 			month: container.getAttribute( 'data-month' ) || '',
 			postsPerPage: parseInt( container.getAttribute( 'data-posts-per-page' ), 10 ) || 9,
 			hidePast: container.getAttribute( 'data-hide-past' ) === '1',
@@ -306,6 +307,7 @@
 			body.set( 'category', state.category );
 			body.set( 'locked_category', state.lockedCategory );
 			body.set( 'paged', state.paged );
+			body.set( 'offset', state.offset );
 			body.set( 'posts_per_page', state.postsPerPage );
 			body.set( 'hide_past', state.hidePast ? '1' : '0' );
 			body.set( 'show_pagination', state.showPagination ? '1' : '0' );
@@ -329,6 +331,7 @@
 					var data = json.data;
 					results.innerHTML = data.html;
 					setupCarousels();
+					bindSliderButtons();
 
 					if ( 'calendar' === state.view ) {
 						if ( calendarLabel ) {
@@ -357,6 +360,7 @@
 					}
 
 					container.setAttribute( 'data-paged', state.paged );
+					container.setAttribute( 'data-slider-offset', state.offset );
 					container.setAttribute( 'data-month', state.month );
 				} )
 				['catch']( function () {
@@ -382,12 +386,29 @@
 			} );
 		}
 
+		// The slider's Previous/Next arrows are re-rendered as part of
+		// data.html on every request (their disabled state and target offset
+		// are computed server-side), so — like bindPaginationButtons() — this
+		// has to be re-run after every replace, not just once at init.
+		function bindSliderButtons() {
+			qsa( container, '[data-vec-slider-offset]' ).forEach( function ( btn ) {
+				btn.addEventListener( 'click', function () {
+					if ( btn.disabled ) {
+						return;
+					}
+					state.offset = parseInt( btn.getAttribute( 'data-vec-slider-offset' ), 10 ) || 0;
+					request();
+				} );
+			} );
+		}
+
 		function switchView( newView ) {
 			if ( newView === state.view ) {
 				return;
 			}
 			state.view = newView;
 			state.paged = 1;
+			state.offset = 0;
 			container.setAttribute( 'data-view', newView );
 
 			viewButtons.forEach( function ( btn ) {
@@ -445,6 +466,7 @@
 		} );
 
 		bindPaginationButtons();
+		bindSliderButtons();
 		setupCarousels();
 
 		if ( calendarNav ) {

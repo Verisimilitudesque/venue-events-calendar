@@ -20,6 +20,9 @@ class VEC_Query {
 	 *   @type int    $paged
 	 *   @type int    $posts_per_page
 	 *   @type bool   $hide_past     Exclude events before today when no explicit date_from is set.
+	 *   @type int|null $offset      When set (e.g. by the slider view), used instead of
+	 *                                $paged so the window can shift by a single event
+	 *                                rather than a full page at a time.
 	 * }
 	 * @return WP_Query
 	 */
@@ -32,6 +35,7 @@ class VEC_Query {
 			'paged'          => 1,
 			'posts_per_page' => 9,
 			'hide_past'      => true,
+			'offset'         => null,
 		);
 		$args = wp_parse_args( $args, $defaults );
 
@@ -112,7 +116,6 @@ class VEC_Query {
 			'post_type'      => VEC_POST_TYPE,
 			'post_status'    => 'publish',
 			'posts_per_page' => (int) $args['posts_per_page'],
-			'paged'          => max( 1, (int) $args['paged'] ),
 			// Soonest event first. ACF's Date Picker stores dates as a
 			// zero-padded Ymd string (20260815), so a plain string sort is
 			// already chronological — no CAST needed, and CAST would in fact
@@ -120,6 +123,16 @@ class VEC_Query {
 			'orderby'        => array( 'event_date_clause' => 'ASC' ),
 			'meta_query'     => $meta_query,
 		);
+
+		// The slider view shifts its window by a single event at a time, which
+		// 'paged' can't express (it only moves in whole posts_per_page jumps),
+		// so it passes an explicit offset instead. Everything else keeps using
+		// 'paged' as before.
+		if ( null !== $args['offset'] && '' !== $args['offset'] ) {
+			$query_args['offset'] = max( 0, (int) $args['offset'] );
+		} else {
+			$query_args['paged'] = max( 1, (int) $args['paged'] );
+		}
 
 		return new WP_Query( $query_args );
 	}

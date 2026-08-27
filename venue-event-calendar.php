@@ -32,6 +32,10 @@ define( 'VEC_PLUGIN_FILE', __FILE__ );
 define( 'VEC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'VEC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'VEC_POST_TYPE', 'event' );
+// Number of cards the slider view shows at once. Shared by the shortcode's
+// initial server render and the AJAX handler that powers the arrow clicks,
+// so they can never disagree on the window size.
+define( 'VEC_SLIDER_WINDOW', 3 );
 
 /**
  * Core includes.
