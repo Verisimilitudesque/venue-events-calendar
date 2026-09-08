@@ -1192,40 +1192,67 @@
 		padding: 14px;
 	}
 	.vec-filterbar {
+		position: relative;
 		flex-direction: column;
 		align-items: stretch;
 	}
-	/* Once stacked, flex-basis applies to height — reset it on the wrapper and
-	   both fields so they hug their content instead of stretching. */
+	/* Unwrapped (rather than just stacked) so its children — the Dates
+	   button and the search field — become reorderable alongside their
+	   sibling .vec-search-btn as if all three were direct children of
+	   .vec-filterbar. Plain "order" can't interleave across a nested
+	   wrapper like this; display: contents removes the wrapper's own box
+	   (border included, which is why each field below carries its own
+	   divider border instead) so the grandparent's flex context reaches
+	   straight through to it. .vec-filterbar picks up position: relative
+	   in its place so .vec-date-popover — which anchors to the nearest
+	   positioned ancestor — still has one to anchor to; because Dates
+	   ends up last in the mobile order below, the popover opening at
+	   "top: 100%" of the whole bar still lands directly under it.  */
 	.vec-filterbar__fields {
-		flex: 0 0 auto;
-		flex-direction: column;
+		display: contents;
 	}
 	.vec-datefield,
 	.vec-searchfield {
 		flex: 0 0 auto;
 	}
-	.vec-datefield {
-		border-right: none;
+	/* Mobile order: search field, then Search button, then Dates. */
+	.vec-searchfield {
+		order: 1;
 		border-bottom: 1px solid var(--vec-border);
+	}
+	.vec-search-btn {
+		order: 2;
+		width: 100%;
+	}
+	.vec-datefield {
+		order: 3;
+		border-right: none;
+		border-top: 1px solid var(--vec-border);
 	}
 	.vec-date-popover {
 		left: 0;
 		right: 0;
 		width: auto;
 	}
-	.vec-search-btn {
-		width: 100%;
-	}
 	.vec-toolbar {
 		flex-direction: column;
 		align-items: flex-start;
 	}
-	.vec-ad-slot {
-		max-width: 100%;
+	/* The grid/list/calendar switcher doesn't make sense as a 3-across
+	   toggle at this width, so it's hidden on mobile entirely rather than
+	   squeezed down — pages needing a specific view on mobile should set
+	   default_view instead. */
+	.vec-view-switcher {
+		display: none;
 	}
+	/* Mobile order: category dropdown, then the ad image. */
 	.vec-category-filter {
+		order: 1;
 		width: 100%;
+	}
+	.vec-ad-slot {
+		order: 2;
+		max-width: 100%;
 	}
 	.vec-category-filter select.vec-input-category {
 		width: 100%;
